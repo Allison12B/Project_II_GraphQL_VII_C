@@ -14,6 +14,7 @@ exports.schema = buildSchema(`
     getVideoById(id: ID!): Video
     getVideoByPlayList(id: ID!): [Video]
     getAllVideos: [Video]
+    searchVideo(restrictedUserId: ID!, playlistId: ID!, text: String): [Video]
   }
 
     type AdminUser {

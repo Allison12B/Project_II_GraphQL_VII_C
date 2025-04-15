@@ -33,8 +33,40 @@ const getAllVideos = async ()=> {
     }
 }
 
+const searchVideo = async ({ restrictedUserId, playlistId, text }) => {
+    try {
+        // Verificar que la playlist le pertenece al usuario restringido
+        const playlist = await PlayList.findOne({ _id: playlistId, restrictedUsers: restrictedUserId });
+
+        if (!playlist) {
+            throw new Error("La playlist no pertenece al usuario restringido.");
+        }
+
+        // Crear query base para los videos relacionados a la playlist
+        const query = {
+            playLists: playlistId
+        };
+
+        // Si se proporciona texto, agregar búsqueda por nombre o descripción
+        if (text) {
+            query.$or = [
+                { name: { $regex: text, $options: "i" } },
+                { description: { $regex: text, $options: "i" } }
+            ];
+        }
+
+        const videos = await Video.find(query);
+
+        return videos;
+    } catch (error) {
+        console.error("Error al obtener los videos:", error);
+        throw new Error("No se pudieron obtener los videos.");
+    }
+}
+
 module.exports = {
     getVideoById,
     getVideoByPlayList,
-    getAllVideos
+    getAllVideos,
+    searchVideo
 }
