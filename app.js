@@ -6,7 +6,7 @@ const { ruruHTML } = require("ruru/server")
 const { schema } = require("./graphql-schema") //Importa los esquema que tenemos preparados en este archivo
 const mongoose = require('mongoose'); // Para hacer consultas con mongoDB
 
-const { getRestrictedUserByAdmin } = require("./controller/restrictedUserController");
+const { getRestrictedUserByAdmin, getRestrictedUserById } = require("./controller/restrictedUserController");
 
 //Data Base connection 
 mongoose.connect("mongodb+srv://kendall14solr:kolerxx12345@reyes.2qxgc.mongodb.net/project_I", { 
@@ -23,8 +23,9 @@ mongoose.connect("mongodb+srv://kendall14solr:kolerxx12345@reyes.2qxgc.mongodb.n
 
 // The root provides a resolver function for each API endpoint (Solución del método al que se consulta)
 const root = {
-
+  //Restricted user´s methods 
   getRestrictedUserByAdmin: getRestrictedUserByAdmin,
+  getRestrictedUserById: getRestrictedUserById,
 
 }
 
