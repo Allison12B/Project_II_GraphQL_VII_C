@@ -7,7 +7,7 @@ const { schema } = require("./graphql-schema");
 const mongoose = require('mongoose'); 
 
 const { getRestrictedUserByAdmin, getRestrictedUserById } = require("./controller/restrictedUserController");
-const { getPlayListByRestrictedUser } = require("./controller/playListController");
+const { getPlayListByRestrictedUser, getPlayListByAdminUser } = require("./controller/playListController");
 
 //Data Base connection 
 mongoose.connect("mongodb+srv://kendall14solr:kolerxx12345@reyes.2qxgc.mongodb.net/project_I", { 
@@ -30,6 +30,7 @@ const root = {
 
   //Play list´s methods
   getPlayListByRestrictedUser: getPlayListByRestrictedUser,
+  getPlayListByAdminUser: getPlayListByAdminUser,
 }
 
 const app = express()
