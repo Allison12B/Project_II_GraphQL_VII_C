@@ -3,10 +3,11 @@ const { createHandler } = require("graphql-http/lib/use/express")
 const { buildSchema, version } = require("graphql")
 const { ruruHTML } = require("ruru/server")
 
-const { schema } = require("./graphql-schema") //Importa los esquema que tenemos preparados en este archivo
-const mongoose = require('mongoose'); // Para hacer consultas con mongoDB
+const { schema } = require("./graphql-schema");
+const mongoose = require('mongoose'); 
 
 const { getRestrictedUserByAdmin, getRestrictedUserById } = require("./controller/restrictedUserController");
+const { getPlayListByRestrictedUser } = require("./controller/playListController");
 
 //Data Base connection 
 mongoose.connect("mongodb+srv://kendall14solr:kolerxx12345@reyes.2qxgc.mongodb.net/project_I", { 
@@ -27,6 +28,8 @@ const root = {
   getRestrictedUserByAdmin: getRestrictedUserByAdmin,
   getRestrictedUserById: getRestrictedUserById,
 
+  //Play list´s methods
+  getPlayListByRestrictedUser: getPlayListByRestrictedUser,
 }
 
 const app = express()
