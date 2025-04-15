@@ -1,4 +1,4 @@
-const RestrictedUser = require("../models/retrictedUser") // Importar el modelo de usuario restringidos
+const RestrictedUser = require("../models/retrictedUser");
 const AdminUser = require("../models/adminUser"); 
 
 const getRestrictedUserByAdmin = async ({ id }) => {
