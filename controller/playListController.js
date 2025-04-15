@@ -19,12 +19,23 @@ const getPlayListByAdminUser = async ({ id }) => {
         const playlists = await PlayList.find({ adminId: id }).populate("restrictedUsers").populate("adminId");
         return playlists;
     }catch (err) {
-        console.error("Error to get restricted user:", err);
+        console.error("Error to get play list by admin user:", err);
         throw new Error("Play list of the admin user Id not fount.");
+    }
+}
+
+const getPlayListById = async ({ id }) => {
+    try {
+        const playlist = await PlayList.findById(id).populate("restrictedUsers").populate("adminId");
+        return playlist;
+    }catch (err) {
+        console.error("Error to get a play list by id:", err);
+        throw new Error("Play list not fount.");
     }
 }
 
 module.exports = {
     getPlayListByRestrictedUser,
-    getPlayListByAdminUser
+    getPlayListByAdminUser,
+    getPlayListById
 }
