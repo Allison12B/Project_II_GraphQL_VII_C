@@ -9,10 +9,32 @@ const getVideoById = async ({ id }) => {
         return video;
     }catch (err) {
         console.error("Error to get video:", err);
-        throw new Error("Video no foound.");
+        throw new Error("Video no found.");
+    }
+}
+
+const getVideoByPlayList = async ({ id }) => {
+    try{
+        const videos = await Video.find({ playLists: id }).populate("playLists");
+        return videos;
+    }catch (err) {
+        console.error("Error to get video of the play list:", err);
+        throw new Error("Videos no found.");
+    }
+}
+
+const getAllVideos = async ()=> {
+    try {
+        const videos = await Video.find();
+        return videos;
+    }catch (err) {
+        console.error("Error to get videos:", err);
+        throw new Error("Videos no found.");
     }
 }
 
 module.exports = {
-    getVideoById
+    getVideoById,
+    getVideoByPlayList,
+    getAllVideos
 }
