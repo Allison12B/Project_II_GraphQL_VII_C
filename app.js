@@ -5,8 +5,8 @@ const { ruruHTML } = require("ruru/server")
 
 const { schema } = require("./graphql-schema") //Importa los esquema que tenemos preparados en este archivo
 const mongoose = require('mongoose'); // Para hacer consultas con mongoDB
-const AdminUser = require("./models/adminUser") // Importar el modelo de usuario administradores
-const RestrictedUser = require("./models/RetrictedUser") // Importar el modelo de usuario restringidos
+
+const { getRestrictedUserByAdmin } = require("./controller/restrictedUserController");
 
 //Data Base connection 
 mongoose.connect("mongodb+srv://kendall14solr:kolerxx12345@reyes.2qxgc.mongodb.net/project_I", { 
@@ -14,41 +14,18 @@ mongoose.connect("mongodb+srv://kendall14solr:kolerxx12345@reyes.2qxgc.mongodb.n
   useUnifiedTopology: true 
 })
   .then(() => {
-    console.log("Conexión a MongoDB exitosa");
+    console.log("Data Base connection successfully");
   })
   .catch((err) => {
-    console.error("Error al conectar a MongoDB:", err);
+    console.error("Error Data Base connection:", err);
   });
 
 
 // The root provides a resolver function for each API endpoint (Solución del método al que se consulta)
 const root = {
-  hello: () => {return "Hello world!"},
-  version: () => {return "1.2.0"},
 
-  getAllAdminUsers: async  () => {
-    try {
-      // Recuperar todos los usuarios desde MongoDB
-      const users = await AdminUser.find(); // Usa el modelo para hacer la consulta
-      return users; // Retorna los usuarios encontrados
-    } catch (error) {
-      console.error("Error al obtener usuarios:", error);
-      throw new Error("No se pudieron obtener los usuarios.");
-    }
-  },
+  getRestrictedUserByAdmin: getRestrictedUserByAdmin,
 
-  getRestrictedUserByAdmin: async ({ id }) => {
-    try {
-      // Busca los usuarios restringidos cuyo adminId coincida con el id del administrador
-      const restrictedUsers = await RestrictedUser.find({ adminId: id }).populate('adminId');
-      return restrictedUsers;
-    } catch (err) {
-      console.error("Error al obtener los usuarios restringidos:", err);
-      throw new Error("No se pudieron obtener los usuarios restringidos.");
-    }
-  },
-
-  
 }
 
 const app = express()
