@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 
 const { getRestrictedUserByAdmin, getRestrictedUserById } = require("./controller/restrictedUserController");
 const { getPlayListByRestrictedUser, getPlayListByAdminUser, getPlayListById } = require("./controller/playListController");
+const { getVideoById } = require("./controller/videoController");
 
 //Data Base connection 
 mongoose.connect("mongodb+srv://kendall14solr:kolerxx12345@reyes.2qxgc.mongodb.net/project_I", { 
@@ -24,14 +25,17 @@ mongoose.connect("mongodb+srv://kendall14solr:kolerxx12345@reyes.2qxgc.mongodb.n
 
 // The root provides a resolver function for each API endpoint (Solución del método al que se consulta)
 const root = {
-  //Restricted user´s methods 
+  //Restricted user´s resolvers 
   getRestrictedUserByAdmin: getRestrictedUserByAdmin,
   getRestrictedUserById: getRestrictedUserById,
 
-  //Play list´s methods
+  //Play list´s resolvers
   getPlayListByRestrictedUser: getPlayListByRestrictedUser,
   getPlayListByAdminUser: getPlayListByAdminUser,
   getPlayListById: getPlayListById,
+
+  //Video´s resolvers
+  getVideoById: getVideoById,
 }
 
 const app = express()
