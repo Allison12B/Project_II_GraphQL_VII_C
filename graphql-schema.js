@@ -10,6 +10,11 @@ exports.schema = buildSchema(`
     getPlayListByRestrictedUser(id: ID!): [PlayList]
     getPlayListByAdminUser(id: ID!): [PlayList]
     getPlayListById(id: ID!): PlayList
+
+    getVideoById(id: ID!): Video
+    getVideoByPlayList(id: ID!): [Video]
+    getAllVideos: [Video]
+    searchVideo(restrictedUserId: ID!, playlistId: ID!, text: String): [Video]
   }
 
     type AdminUser {
@@ -39,5 +44,13 @@ exports.schema = buildSchema(`
     restrictedUsers: [RestrictedUser!]!
     adminId: AdminUser!
   }
+
+  type Video {
+  _id: ID!
+  name: String!
+  url: String!
+  description: String
+  playLists: [PlayList!] 
+}
 
   `);
