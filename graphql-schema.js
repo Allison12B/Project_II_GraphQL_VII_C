@@ -8,6 +8,7 @@ exports.schema = buildSchema(`
     getRestrictedUserById(id: ID!): RestrictedUser
 
     getPlayListByRestrictedUser(id: ID!): [PlayList]
+    getPlayListByAdminUser(id: ID!): [PlayList]
   }
 
     type AdminUser {
