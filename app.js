@@ -1,4 +1,5 @@
 const express = require("express")
+const cors = require("cors");
 const { createHandler } = require("graphql-http/lib/use/express")
 const { buildSchema, version } = require("graphql")
 const { ruruHTML } = require("ruru/server")
@@ -42,6 +43,11 @@ const root = {
 }
 
 const app = express()
+app.use(cors({
+  origin: "http://127.0.0.1:5500", // o "*" solo para desarrollo
+  methods: ["POST", "GET", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 // Create and use the GraphQL handler. (Crea una url en donde se relaciona la consulta con su resolver)
 app.all(
