@@ -5,16 +5,18 @@ const { buildSchema, version } = require("graphql")
 const { ruruHTML } = require("ruru/server")
 
 const { schema } = require("./graphql-schema");
-const mongoose = require('mongoose'); 
+const mongoose = require('mongoose');
+
+const jwt = require('jsonwebtoken');
 
 const { getRestrictedUserByAdmin, getRestrictedUserById } = require("./controller/restrictedUserController");
 const { getPlayListByRestrictedUser, getPlayListByAdminUser, getPlayListById } = require("./controller/playListController");
 const { getVideoById, getVideoByPlayList, getAllVideos, searchVideo } = require("./controller/videoController");
 
 //Data Base connection 
-mongoose.connect("mongodb+srv://kendall14solr:kolerxx12345@reyes.2qxgc.mongodb.net/project_I", { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true 
+mongoose.connect("mongodb+srv://kendall14solr:kolerxx12345@reyes.2qxgc.mongodb.net/project_I", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 })
   .then(() => {
     console.log("Data Base connection successfully");
@@ -23,6 +25,34 @@ mongoose.connect("mongodb+srv://kendall14solr:kolerxx12345@reyes.2qxgc.mongodb.n
     console.error("Error Data Base connection:", err);
   });
 
+const app = express()
+app.use(cors({
+  origin: "http://127.0.0.1:5500", // o "*" solo para desarrollo
+  methods: ["POST", "GET", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+
+// Create and use the GraphQL handler. (Crea una url en donde se relaciona la consulta con su resolver)
+app.all("/graphql", (req, res) => {
+  const authHeader = req.headers.authorization;
+  let user = null;
+
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    const token = authHeader.split(" ")[1];
+    try {
+      user = jwt.verify(token, "123JWT"); // Usa tu misma clave secreta
+    } catch (err) {
+      console.warn("Token inválido:", err.message);
+    }
+  }
+
+  return createHandler({
+    schema,
+    rootValue: root,
+    context: { user }, 
+  })(req, res);
+});
 
 // The root provides a resolver function for each API endpoint (Solución del método al que se consulta)
 const root = {
@@ -42,21 +72,8 @@ const root = {
   searchVideo: searchVideo,
 }
 
-const app = express()
-app.use(cors({
-  origin: "http://127.0.0.1:5500", // o "*" solo para desarrollo
-  methods: ["POST", "GET", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
 
-// Create and use the GraphQL handler. (Crea una url en donde se relaciona la consulta con su resolver)
-app.all(
-  "/graphql",
-  createHandler({
-    schema: schema,
-    rootValue: root,
-  })
-)
+
 
 // Serve the GraphiQL IDE. (Genera una interfaz para probar mi endpoint)
 app.get("/", (_req, res) => {
