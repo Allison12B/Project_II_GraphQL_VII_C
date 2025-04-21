@@ -42,6 +42,7 @@ app.all("/graphql", (req, res) => {
     const token = authHeader.split(" ")[1];
     try {
       user = jwt.verify(token, "123JWT"); // Usa tu misma clave secreta
+      req.user = user;
     } catch (err) {
       console.warn("Token inválido:", err.message);
     }
