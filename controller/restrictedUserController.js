@@ -1,14 +1,15 @@
 const RestrictedUser = require("../models/retrictedUser");
 const AdminUser = require("../models/adminUser");
 
-const getRestrictedUserByAdmin = async (args, context) => {
+const getRestrictedUserByAdmin = async (_args, context) => {
     try {
         const user = context.user;
+        console.log("Usuario autenticado desde el contexto:", user);
 
         if (!user) {
             throw new Error("No autorizado");
         }
-        const restrictedUsers = await RestrictedUser.find({ adminId: user.id }).populate('adminId'); 
+        const restrictedUsers = await RestrictedUser.find({ adminId: user.adminId }).populate('adminId'); 
         return restrictedUsers;
     } catch (err) {
         console.error("Error al obtener los usuarios restringidos:", err);
