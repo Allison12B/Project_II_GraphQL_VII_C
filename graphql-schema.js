@@ -4,7 +4,7 @@ const { buildSchema } = require('graphql');
 */
 exports.schema = buildSchema(`
   type Query {
-    getRestrictedUserByAdmin(id: ID!): [RestrictedUser] 
+    getRestrictedUserByAdmin: [RestrictedUser] 
     getRestrictedUserById(id: ID!): RestrictedUser
 
     getPlayListByRestrictedUser(id: ID!): [PlayList]

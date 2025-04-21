@@ -1,9 +1,15 @@
 const RestrictedUser = require("../models/retrictedUser");
-const AdminUser = require("../models/adminUser"); 
+const AdminUser = require("../models/adminUser");
 
-const getRestrictedUserByAdmin = async ({ id }) => {
+const getRestrictedUserByAdmin = async (_args, context) => {
     try {
-        const restrictedUsers = await RestrictedUser.find({ adminId: id }).populate('adminId'); // ahora sí puede hacer populate
+        const user = context.user;
+        console.log("Usuario autenticado desde el contexto:", user);
+
+        if (!user) {
+            throw new Error("No autorizado");
+        }
+        const restrictedUsers = await RestrictedUser.find({ adminId: user.adminId }).populate('adminId'); 
         return restrictedUsers;
     } catch (err) {
         console.error("Error al obtener los usuarios restringidos:", err);
