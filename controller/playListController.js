@@ -14,9 +14,11 @@ const getPlayListByRestrictedUser = async ({ id }) => {
     }
 }
 
-const getPlayListByAdminUser = async ({ id }) => {
+const getPlayListByAdminUser = async (_args, context) => {
     try {
-        const playlists = await PlayList.find({ adminId: id }).populate("restrictedUsers").populate("adminId");
+        const user = context.user;
+        console.log("Usuario autenticado desde el contexto:", user);
+        const playlists = await PlayList.find({ adminId: user.adminId }).populate("restrictedUsers").populate("adminId");
         return playlists;
     }catch (err) {
         console.error("Error to get play list by admin user:", err);

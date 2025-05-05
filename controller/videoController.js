@@ -23,9 +23,10 @@ const getVideoByPlayList = async ({ id }) => {
     }
 }
 
-const getAllVideos = async ()=> {
+const getAllVideos = async (_args, context)=> {
     try {
-        const videos = await Video.find();
+        const user = context.user;
+        const videos = await Video.find({ adminId: user.adminId });
         return videos;
     }catch (err) {
         console.error("Error to get videos:", err);
