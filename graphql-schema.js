@@ -12,6 +12,7 @@ exports.schema = buildSchema(`
     getPlayListById(id: ID!): PlayList
 
     getVideoById(id: ID!): Video
+    getVideoByPlayList(id: ID!): [Video]
     getAllVideos: [Video]
     searchVideo(restrictedUserId: ID!, playlistId: ID!, text: String): [Video]
   }

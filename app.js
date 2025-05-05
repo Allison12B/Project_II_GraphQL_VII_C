@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken');
 
 const { getRestrictedUserByAdmin, getRestrictedUserById } = require("./controller/restrictedUserController");
 const { getPlayListByRestrictedUser, getPlayListByAdminUser, getPlayListById } = require("./controller/playListController");
-const { getVideoById, getAllVideos, searchVideo } = require("./controller/videoController");
+const { getVideoById, getVideoByPlayList, getAllVideos, searchVideo } = require("./controller/videoController");
 
 //Data Base connection 
 mongoose.connect("mongodb+srv://kendall14solr:kolerxx12345@reyes.2qxgc.mongodb.net/project_I", {
@@ -68,6 +68,7 @@ const root = {
 
   //Video´s resolvers
   getVideoById: getVideoById,
+  getVideoByPlayList: getVideoByPlayList,
   getAllVideos: getAllVideos,
   searchVideo: searchVideo,
 }
