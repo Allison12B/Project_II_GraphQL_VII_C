@@ -13,16 +13,6 @@ const getVideoById = async ({ id }) => {
     }
 }
 
-const getVideoByPlayList = async ({ id }) => {
-    try{
-        const videos = await Video.find({ playLists: id }).populate("playLists");
-        return videos;
-    }catch (err) {
-        console.error("Error to get video of the play list:", err);
-        throw new Error("Videos no found.");
-    }
-}
-
 const getAllVideos = async (_args, context)=> {
     try {
         const user = context.user;
@@ -36,19 +26,16 @@ const getAllVideos = async (_args, context)=> {
 
 const searchVideo = async ({ restrictedUserId, playlistId, text }) => {
     try {
-        // Verificar que la playlist le pertenece al usuario restringido
         const playlist = await PlayList.findOne({ _id: playlistId, restrictedUsers: restrictedUserId });
 
         if (!playlist) {
             throw new Error("La playlist no pertenece al usuario restringido.");
         }
 
-        // Crear query base para los videos relacionados a la playlist
         const query = {
             playLists: playlistId
         };
 
-        // Si se proporciona texto, agregar búsqueda por nombre o descripción
         if (text) {
             query.$or = [
                 { name: { $regex: text, $options: "i" } },
@@ -67,7 +54,6 @@ const searchVideo = async ({ restrictedUserId, playlistId, text }) => {
 
 module.exports = {
     getVideoById,
-    getVideoByPlayList,
     getAllVideos,
     searchVideo
 }
