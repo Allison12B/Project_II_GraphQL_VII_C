@@ -3,7 +3,7 @@ const cors = require("cors");
 const { createHandler } = require("graphql-http/lib/use/express")
 const { buildSchema, version } = require("graphql")
 const { ruruHTML } = require("ruru/server")
-
+require('dotenv').config();
 const { schema } = require("./graphql-schema");
 const mongoose = require('mongoose');
 
@@ -14,7 +14,7 @@ const { getPlayListByRestrictedUser, getPlayListByAdminUser, getPlayListById } =
 const { getVideoById, getVideoByPlayList, getAllVideos, searchVideo } = require("./controller/videoController");
 
 //Data Base connection 
-mongoose.connect("mongodb+srv://kendall14solr:kolerxx12345@reyes.2qxgc.mongodb.net/project_I", {
+mongoose.connect(process.env.DB_CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -41,7 +41,7 @@ app.all("/graphql", (req, res) => {
   if (authHeader && authHeader.startsWith("Bearer ")) {
     const token = authHeader.split(" ")[1];
     try {
-      user = jwt.verify(token, "123JWT"); // Usa tu misma clave secreta
+      user = jwt.verify(token, process.env.JWT_SECRET); 
       req.user = user;
     } catch (err) {
       console.warn("Token inválido:", err.message);
